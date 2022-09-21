@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
-"""module docs"""
+""" The basics of async """
 
+import asyncio
+import random
 from typing import List
+
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
-async def task_wait_n(n: int, max_delay: int = 10) -> List[float]:
-    """function docs"""
-    spawn_ls = []
-    delay_ls = []
-    for i in range(n):
-        delayed_task = task_wait_random(max_delay)
-        delayed_task.add_done_callback(lambda x: delay_ls.append(x.result()))
-        spawn_ls.append(delayed_task)
+async def task_wait_n(n: int, max_delay: int) -> List[float]:
+    """
+    spawn task_wait_random n times with the specified max_delay.
+    """
+    queue, array = [], []
 
-    for spawn in spawn_ls:
-        await spawn
+    for _ in range(n):
+        queue.append(task_wait_random(max_delay))
 
-    return delay_ls
+    for q in asyncio.as_completed(queue):
+        result = await q
+        array.append(result)
+
+    return array
