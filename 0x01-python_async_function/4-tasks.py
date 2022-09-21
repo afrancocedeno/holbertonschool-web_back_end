@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
-"""module docs"""
+""" 4. Tasks  """
 
+import asyncio
 from typing import List
+
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
-async def task_wait_n(n: int, max_delay: int = 10) -> List[float]:
-    """function docs"""
-    spawn_ls = []
-    delay_ls = []
-    for i in range(n):
-        delayed_task = task_wait_random(max_delay)
-        delayed_task.add_done_callback(lambda x: delay_ls.append(x.result()))
-        spawn_ls.append(delayed_task)
+async def task_wait_n(n: int, max_delay: int) -> List[float]:
+    """ 4. Tasks """
 
-    for spawn in spawn_ls:
-        await spawn
+    aux1 = []
+    aux2 = []
 
-    return delay_ls
+    for _ in range(n):
+        aux1.append(task_wait_random(max_delay))
+
+    for a1 in asyncio.as_completed(aux1):
+        result = await a1
+        aux2.append(result)
+
+    return aux2
