@@ -1,23 +1,28 @@
-#!/usr/bin/env python3
-""" 4. Tasks  """
+#!/usr/bin/env python3.7
+'''
+module doc
+'''
 
 import asyncio
 from typing import List
 
+wait_random = __import__('0-basic_async_syntax').wait_random
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
 async def task_wait_n(n: int, max_delay: int) -> List[float]:
-    """ 4. Tasks """
-
-    aux1 = []
-    aux2 = []
+    '''
+    function doc
+    '''
+    tasks = []
+    delays = []
 
     for _ in range(n):
-        aux1.append(task_wait_random(max_delay))
+        tasks.append(task_wait_random(max_delay))
 
-    for a1 in asyncio.as_completed(aux1):
-        result = await a1
-        aux2.append(result)
+    # Create queue with results depending on the function have the result ready
+    # Read more: shorturl.at/grAUY
+    for task in asyncio.as_completed(tasks):
+        delays.append(await task)
 
-    return aux2
+    return delays
